@@ -51,7 +51,7 @@ export class UsersService {
 
   async findAll() {
     const list = await this.userRepository.find({
-      relations: ['role', 'city', 'branches'],
+      relations: ['role'],
       where: { status: 1 },
     });
     if (!list.length) {
@@ -62,7 +62,7 @@ export class UsersService {
 
   async findOne(id: number) {
     const item = await this.userRepository.findOne({
-      relations: ['role', 'city', 'branches'],
+      relations: ['role'],
       where: { id_user: id, status: 1 },
     });
     if (!item) {
@@ -83,7 +83,7 @@ export class UsersService {
 
   async login(email: string, password: string) {
     const item = await this.userRepository.findOne({
-      relations: ['role', 'city'],
+      relations: ['role'],
       where: { email: email, password: password },
     });
     if (!item) {
@@ -102,7 +102,7 @@ export class UsersService {
 
   async findbyemail(email: string) {
     const item = await this.userRepository.findOne({
-      relations: ['role', 'city', 'branches'],
+      relations: ['role'],
       where: { email: email, status: 1 },
     });
 
@@ -121,7 +121,7 @@ export class UsersService {
     const userId = this.userContextAuth.getUser().id_user;
     const item = await this.userRepository.findOne({
       where: { id_user: id, status: 1 },
-      relations: ['role', 'city', 'branches'],
+      relations: ['role'],
     });
 
     if (updateUserDto.password) {

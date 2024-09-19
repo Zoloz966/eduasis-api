@@ -51,19 +51,11 @@ export class CreateUserDto {
 
   @IsNumber()
   @IsOptional()
-  selected_city: number;
-
-  @IsNumber()
-  @IsOptional()
   isEnabled: number;
 
   @IsString()
   @IsOptional()
   info: string;
-
-  @IsArray()
-  @IsNotEmpty()
-  readonly branchesIds: number[];
 
   @IsNumber()
   @IsOptional()

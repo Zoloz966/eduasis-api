@@ -9,6 +9,7 @@ import * as Joi from 'joi';
 import config from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { OpenAiModule } from './openAi/openAi.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    OpenAiModule
   ],
   controllers: [AppController],
   providers: [AppService],

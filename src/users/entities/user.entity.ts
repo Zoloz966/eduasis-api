@@ -48,9 +48,6 @@ export class Users {
   @Column({ nullable: true, type: 'varchar', length: 100, default: '' })
   photo: string;
 
-  @Column({ type: 'int', default: 1 })
-  selected_city: number;
-
   @Column({ type: 'tinyint', default: 1, comment: '1: enabled, 0: disabled' })
   isEnabled: number;
 
