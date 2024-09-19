@@ -13,18 +13,15 @@ import { RoleService } from './services/role.service';
 import { Access } from './entities/access.entity';
 import { AccessController } from './access.controller';
 import { AccessService } from './services/access.service';
-import { CitiesService } from 'src/admin/services/cities.service';
-import { Cities } from 'src/admin/entities/city.entity';
 import { UserContextModule } from 'src/userContext/userContext.module';
-import { Branches } from 'src/admin/entities/branch.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Users, UserLogs, Branches, Role, Access, Cities]),
+    TypeOrmModule.forFeature([Users, UserLogs, Role, Access]),
     UserContextModule,
   ],
   controllers: [UsersController, RoleController, AccessController],
-  providers: [UsersService, RoleService, AccessService, CitiesService],
+  providers: [UsersService, RoleService, AccessService],
   exports: [UsersService],
 })
 export class UsersModule {}

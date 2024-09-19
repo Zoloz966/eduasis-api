@@ -7,23 +7,18 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { Users } from '../entities/user.entity';
 import { RoleService } from './role.service';
 import { In, Repository } from 'typeorm';
-import { CitiesService } from 'src/admin/services/cities.service';
 import { UserLogs } from '../entities/userLog.entity';
 import { CreateUserLogsDto } from '../dto/create-userLog.dto';
 import { UserContextService } from 'src/userContext/service/userContext.service';
-import { Branches } from 'src/admin/entities/branch.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
-    @InjectRepository(Branches)
-    private branchesRepository: Repository<Branches>,
     @InjectRepository(UserLogs)
     private userLogsRepository: Repository<UserLogs>,
     private roleService: RoleService,
-    private citiesService: CitiesService,
     private readonly userContextAuth: UserContextService,
   ) {}
 
@@ -35,20 +30,6 @@ export class UsersService {
     if (createUserDto.roleIdRole) {
       const role = await this.roleService.findOne(createUserDto.roleIdRole);
       newUser.role = role;
-    }
-
-    if (createUserDto.selected_city) {
-      const city = await this.citiesService.findOne(
-        createUserDto.selected_city,
-      );
-      newUser.city = city;
-    }
-
-    if (createUserDto.branchesIds) {
-      const branches = await this.branchesRepository.findBy({
-        id_branch: In(createUserDto.branchesIds),
-      });
-      newUser.branches = branches;
     }
 
     const savedUser = await this.userRepository.save(newUser);
@@ -116,11 +97,6 @@ export class UsersService {
       item.role = access;
     }
 
-    if (item.selected_city) {
-      const city = await this.citiesService.findOne(item.selected_city);
-      item.city = city;
-    }
-
     return item;
   }
 
@@ -156,20 +132,6 @@ export class UsersService {
     if (updateUserDto.roleIdRole) {
       const role = await this.roleService.findOne(updateUserDto.roleIdRole);
       item.role = role;
-    }
-
-    if (updateUserDto.selected_city) {
-      const city = await this.citiesService.findOne(
-        updateUserDto.selected_city,
-      );
-      item.city = city;
-    }
-
-    if (updateUserDto.branchesIds) {
-      const branch = await this.branchesRepository.findBy({
-        id_branch: In(updateUserDto.branchesIds),
-      });
-      item.branches = branch;
     }
 
     this.userRepository.merge(item, updateUserDto);

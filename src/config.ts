@@ -13,6 +13,7 @@ export default registerAs('config', () => {
       user: process.env.MYSQL_USER,
       host: process.env.MYSQL_HOST,
     },
+    openAiApiKey: process.env.OPENAI_API_KEY,
     apiKey: process.env.API_KEY,
     jwtSecret: process.env.JWT_SECRET,
   };
