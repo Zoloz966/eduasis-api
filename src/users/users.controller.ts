@@ -23,8 +23,8 @@ import { Public } from 'src/auth/decorators/public.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Public()
   @Post()
+  @Public()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
