@@ -10,6 +10,7 @@ import config from './config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { OpenAiModule } from './openAi/openAi.module';
+import { AcademicManagementModule } from './academicManagement/academicManagement.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { OpenAiModule } from './openAi/openAi.module';
     }),
     UsersModule,
     AuthModule,
-    OpenAiModule
+    AcademicManagementModule,
+    OpenAiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
