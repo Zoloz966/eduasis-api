@@ -1,4 +1,13 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Students } from './students.entity';
+import { Classes } from './classes.entity';
 
 export enum TypeGrade {
   PRIMER_TRIMESTRE = 'Primer Trimestre',
@@ -12,10 +21,10 @@ export class Grades {
   id_grade: number;
 
   @Column({ type: 'int', nullable: false })
-  student_id: number;
+  studentIdStudent: number;
 
   @Column({ type: 'int', nullable: false })
-  class_id: number;
+  classIdClass: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   grade: number;
@@ -38,4 +47,10 @@ export class Grades {
     nullable: false,
   })
   updated_at: Date;
+
+  @ManyToOne(() => Students, (student) => student.grades)
+  student: Students;
+
+  @ManyToOne(() => Classes, (classes) => classes.grades)
+  class: Classes;
 }

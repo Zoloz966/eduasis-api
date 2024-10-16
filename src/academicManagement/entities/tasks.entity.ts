@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Students } from './students.entity';
+import { Classes } from './classes.entity';
 
 @Entity()
 export class Tasks {
@@ -16,6 +19,12 @@ export class Tasks {
 
   @Column({ type: 'text' })
   description: string;
+
+  @Column({ type: 'int', nullable: false })
+  classIdClass: number;
+
+  @Column({ type: 'int', nullable: false })
+  studentIdStudent: number;
 
   @Column({ type: 'timestamp', nullable: false })
   end_date: Date;
@@ -41,4 +50,10 @@ export class Tasks {
     nullable: false,
   })
   updated_at: Date;
+
+  @ManyToOne(() => Students, (student) => student.tasks)
+  student: Students;
+
+  @ManyToOne(() => Classes, (classes) => classes.tasks)
+  class: Classes;
 }

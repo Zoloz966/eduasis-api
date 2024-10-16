@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Gender } from './students.entity';
+import { Classes } from './classes.entity';
 
 @Entity()
 export class Teachers {
@@ -75,4 +77,7 @@ export class Teachers {
 
   @ManyToOne(() => Role)
   role: Role;
+
+  @OneToMany(() => Classes, (classes) => classes.teacher)
+  classes: Classes[];
 }

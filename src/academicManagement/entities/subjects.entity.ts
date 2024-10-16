@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Classes } from './classes.entity';
 
 @Entity()
 export class Subjects {
@@ -22,4 +30,7 @@ export class Subjects {
     nullable: false,
   })
   updated_at: Date;
+
+  @OneToMany(() => Classes, (classes) => classes.subject)
+  classes: Classes[];
 }

@@ -1,4 +1,18 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Teachers } from './teachers.entity';
+import { Subjects } from './subjects.entity';
+import { Students } from './students.entity';
+import { Grades } from './grades.entity';
+import { Tasks } from './tasks.entity';
 
 export enum Shift {
   Mañana = 'Mañana',
@@ -40,4 +54,19 @@ export class Classes {
     nullable: false,
   })
   updated_at: Date;
+
+  @ManyToMany(() => Students, (student) => student.classes)
+  students: Students[];
+
+  @ManyToOne(() => Teachers, (teacher) => teacher.classes)
+  teacher: Teachers;
+
+  @ManyToOne(() => Subjects, (subject) => subject.classes)
+  subject: Subjects;
+
+  @OneToMany(() => Grades, (grade) => grade.class)
+  grades: Grades[];
+
+  @OneToMany(() => Tasks, (task) => task.class)
+  tasks: Tasks[];
 }

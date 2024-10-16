@@ -4,10 +4,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Classes } from './classes.entity';
+import { Grades } from './grades.entity';
+import { Tasks } from './tasks.entity';
 
 export enum Gender {
   Masculino = 'Masculino',
@@ -77,6 +83,16 @@ export class Students {
   })
   updated_at: Date;
 
+  @ManyToMany(() => Classes, (classes) => classes.students)
+  @JoinTable()
+  classes: Classes[];
+
   @ManyToOne(() => Role)
   role: Role;
+
+  @OneToMany(() => Grades, (grade) => grade.student)
+  grades: Grades[];
+
+  @OneToMany(() => Tasks, (task) => task.student)
+  tasks: Tasks[];
 }
