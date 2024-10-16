@@ -9,8 +9,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Gender } from './students.entity';
 import { Classes } from './classes.entity';
+
+export enum Gender {
+    Masculino = 'Masculino',
+    Femenino = 'Femenino',
+  }
 
 @Entity()
 export class Teachers {

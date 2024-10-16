@@ -18,6 +18,12 @@ import { TasksService } from './services/tasks.service';
 import { Grades } from './entities/grades.entity';
 import { GradesController } from './grades.controller';
 import { GradesService } from './services/grades.service';
+import { RoleService } from 'src/users/services/role.service';
+import { Role } from 'src/users/entities/role.entity';
+import { Users } from 'src/users/entities/user.entity';
+import { Access } from 'src/users/entities/access.entity';
+import { UserLogs } from 'src/users/entities/userLog.entity';
+import { UserContextModule } from 'src/userContext/userContext.module';
 
 @Module({
   imports: [
@@ -27,8 +33,13 @@ import { GradesService } from './services/grades.service';
       Subjects,
       Classes,
       Tasks,
+      Users,
       Grades,
+      Role,
+      Access,
+      UserLogs
     ]),
+    UserContextModule,
   ],
   controllers: [
     StudentsController,
@@ -44,6 +55,7 @@ import { GradesService } from './services/grades.service';
     SubjectsService,
     ClassesService,
     TasksService,
+    RoleService,
     GradesService,
   ],
 })
