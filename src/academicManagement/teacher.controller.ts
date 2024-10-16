@@ -24,7 +24,6 @@ import {
     constructor(private readonly teachersService: TeachersService) {}
   
     @Post()
-    @Public()
     create(@Body() createTeacherDto: CreateTeacherDto) {
       return this.teachersService.create(createTeacherDto);
     }

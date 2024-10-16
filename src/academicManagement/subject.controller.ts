@@ -24,7 +24,6 @@ export class SubjectsController {
   constructor(private readonly subjectsService: SubjectsService) {}
 
   @Post()
-  @Public()
   create(@Body() createSubjectDto: CreateSubjectDto) {
     return this.subjectsService.create(createSubjectDto);
   }

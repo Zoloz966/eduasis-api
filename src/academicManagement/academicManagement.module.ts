@@ -9,10 +9,23 @@ import { TeachersService } from './services/teachers.service';
 import { Subjects } from './entities/subjects.entity';
 import { SubjectsController } from './subject.controller';
 import { SubjectsService } from './services/subjects.service';
+import { Classes } from './entities/classes.entity';
+import { ClassesController } from './classes.controller';
+import { ClassesService } from './services/classes.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Students, Teachers, Subjects])],
-  controllers: [StudentsController, TeachersController, SubjectsController],
-  providers: [StudentsService, TeachersService, SubjectsService],
+  imports: [TypeOrmModule.forFeature([Students, Teachers, Subjects, Classes])],
+  controllers: [
+    StudentsController,
+    TeachersController,
+    SubjectsController,
+    ClassesController,
+  ],
+  providers: [
+    StudentsService,
+    TeachersService,
+    SubjectsService,
+    ClassesService,
+  ],
 })
 export class AcademicManagementModule {}

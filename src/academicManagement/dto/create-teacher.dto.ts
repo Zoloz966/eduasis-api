@@ -1,12 +1,15 @@
 import { Transform } from 'class-transformer';
 import {
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  NotEquals,
 } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
+import { Gender } from '../entities/students.entity';
 
 export class CreateTeacherDto {
   @PrimaryGeneratedColumn()
@@ -50,6 +53,10 @@ export class CreateTeacherDto {
   @IsString()
   @IsOptional()
   photo: string;
+
+  @IsEnum(Gender)
+  @NotEquals(Gender[Gender.Masculino])
+  gender: Gender;
 
   @IsNumber()
   @IsOptional()
