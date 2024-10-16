@@ -6,15 +6,17 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Classes } from './classes.entity';
+import { Courses } from './courses.entity';
 
 export enum Gender {
-    Masculino = 'Masculino',
-    Femenino = 'Femenino',
-  }
+  Masculino = 'Masculino',
+  Femenino = 'Femenino',
+}
 
 @Entity()
 export class Teachers {
@@ -84,4 +86,7 @@ export class Teachers {
 
   @OneToMany(() => Classes, (classes) => classes.teacher)
   classes: Classes[];
+
+  @OneToOne(() => Courses, (course) => course.teacher)
+  course: Courses;
 }

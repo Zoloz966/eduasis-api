@@ -14,6 +14,7 @@ import {
 import { Classes } from './classes.entity';
 import { Grades } from './grades.entity';
 import { Tasks } from './tasks.entity';
+import { Courses } from './courses.entity';
 
 export enum Gender {
   Masculino = 'Masculino',
@@ -43,6 +44,9 @@ export class Students {
 
   @Column({ type: 'int', nullable: false, default: 1 })
   roleIdRole: number;
+
+  @Column({ type: 'int', nullable: false })
+  courseIdCourse: number;
 
   @Column({ type: 'varchar', length: 200, default: 'xxx' })
   token: string;
@@ -89,6 +93,9 @@ export class Students {
 
   @ManyToOne(() => Role)
   role: Role;
+
+  @ManyToOne(() => Courses, (courses) => courses.students)
+  course: Courses;
 
   @OneToMany(() => Grades, (grade) => grade.student)
   grades: Grades[];

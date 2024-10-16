@@ -24,6 +24,9 @@ import { Users } from 'src/users/entities/user.entity';
 import { Access } from 'src/users/entities/access.entity';
 import { UserLogs } from 'src/users/entities/userLog.entity';
 import { UserContextModule } from 'src/userContext/userContext.module';
+import { Courses } from './entities/courses.entity';
+import { CoursesController } from './courses.controller';
+import { CoursesService } from './services/courses.service';
 
 @Module({
   imports: [
@@ -37,7 +40,8 @@ import { UserContextModule } from 'src/userContext/userContext.module';
       Grades,
       Role,
       Access,
-      UserLogs
+      UserLogs,
+      Courses,
     ]),
     UserContextModule,
   ],
@@ -48,6 +52,7 @@ import { UserContextModule } from 'src/userContext/userContext.module';
     ClassesController,
     TasksController,
     GradesController,
+    CoursesController,
   ],
   providers: [
     StudentsService,
@@ -57,6 +62,7 @@ import { UserContextModule } from 'src/userContext/userContext.module';
     TasksService,
     RoleService,
     GradesService,
+    CoursesService,
   ],
 })
 export class AcademicManagementModule {}
