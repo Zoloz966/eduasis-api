@@ -15,10 +15,20 @@ import { ClassesService } from './services/classes.service';
 import { Tasks } from './entities/tasks.entity';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './services/tasks.service';
+import { Grades } from './entities/grades.entity';
+import { GradesController } from './grades.controller';
+import { GradesService } from './services/grades.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Students, Teachers, Subjects, Classes, Tasks]),
+    TypeOrmModule.forFeature([
+      Students,
+      Teachers,
+      Subjects,
+      Classes,
+      Tasks,
+      Grades,
+    ]),
   ],
   controllers: [
     StudentsController,
@@ -26,6 +36,7 @@ import { TasksService } from './services/tasks.service';
     SubjectsController,
     ClassesController,
     TasksController,
+    GradesController,
   ],
   providers: [
     StudentsService,
@@ -33,6 +44,7 @@ import { TasksService } from './services/tasks.service';
     SubjectsService,
     ClassesService,
     TasksService,
+    GradesService,
   ],
 })
 export class AcademicManagementModule {}
