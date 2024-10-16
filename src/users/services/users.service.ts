@@ -102,7 +102,7 @@ export class UsersService {
 
   async findbyemail(email: string) {
     const item = await this.userRepository.findOne({
-      relations: ['role'],
+      relations: ['role' ],
       where: { email: email, status: 1 },
     });
 
@@ -121,7 +121,7 @@ export class UsersService {
     const userId = this.userContextAuth.getUser().id_user;
     const item = await this.userRepository.findOne({
       where: { id_user: id, status: 1 },
-      relations: ['role'],
+      relations: ['role' ],
     });
 
     if (updateUserDto.password) {
