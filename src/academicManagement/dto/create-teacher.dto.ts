@@ -24,15 +24,16 @@ export class CreateTeacherDto {
   lastname: string;
 
   @IsOptional()
-  @IsNotEmpty()
+  @IsString()
   id: string;
 
+  @IsOptional()
+  @IsString()
+  email: string;
+
+  @IsOptional()
   @IsString()
   password: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  roleIdRole: number;
 
   @IsString()
   @IsOptional()
@@ -44,7 +45,7 @@ export class CreateTeacherDto {
 
   @IsString()
   @IsNotEmpty()
-  tutor_phone: string;
+  phone: string;
 
   @IsDate()
   @Transform(({ value }) => value && new Date(value))

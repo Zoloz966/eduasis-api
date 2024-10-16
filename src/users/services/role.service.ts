@@ -71,6 +71,17 @@ export class RoleService {
     return list;
   }
 
+  async findTeacher() {
+    const obj = await this.roleRepository.findOne({
+      relations: ['access'],
+      where: { name: 'Maestro' },
+    });
+    if (!obj) {
+      throw new NotFoundException(`This role teacher not found`);
+    }
+    return obj;
+  }
+
   async findOne(id: number) {
     const obj = await this.roleRepository.findOne({
       relations: ['access'],

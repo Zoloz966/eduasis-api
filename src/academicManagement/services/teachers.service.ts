@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { CreateTeacherDto } from '../dto/create-teacher.dto';
 import { UpdateTeacherDto } from '../dto/update-teacher.dto';
 import { Teachers } from '../entities/teachers.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RoleService } from 'src/users/services/role.service';
 
 @Injectable()
@@ -18,12 +18,17 @@ export class TeachersService {
 
   async create(createTeacherDto: CreateTeacherDto) {
     const newTeacher = this.teacherRepository.create(createTeacherDto);
+
+    const initialsLastname = newTeacher.lastname.slice(0, 3).toUpperCase();
+    const birthDate = new Date(newTeacher.birth_date);
+    const formattedDate = this.formatDateToString(birthDate);
+
+    newTeacher.password = initialsLastname + formattedDate;
+
     const hashPassword = await bcrypt.hash(newTeacher.password, 10);
     newTeacher.password = hashPassword;
-    if (createTeacherDto.roleIdRole) {
-      const role = await this.roleService.findOne(createTeacherDto.roleIdRole);
-      newTeacher.role = role;
-    }
+    const role = await this.roleService.findTeacher();
+    newTeacher.role = role;
 
     const savedTeacher = await this.teacherRepository.save(newTeacher);
 
@@ -109,11 +114,6 @@ export class TeachersService {
       updateTeacherDto.password = hashPassword;
     }
 
-    if (updateTeacherDto.roleIdRole) {
-      const role = await this.roleService.findOne(updateTeacherDto.roleIdRole);
-      item.role = role;
-    }
-
     this.teacherRepository.merge(item, updateTeacherDto);
 
     const savedTeacher = await this.teacherRepository.save(item);
@@ -132,5 +132,13 @@ export class TeachersService {
     const savedTeacher = await this.teacherRepository.save(item);
 
     return savedTeacher;
+  }
+
+  private formatDateToString(date) {
+    const day = ('0' + date.getDate()).slice(-2); // Asegura dos dígitos para el día
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Asegura dos dígitos para el mes (getMonth() devuelve un índice de 0 a 11)
+    const year = date.getFullYear().toString().slice(-2); // Obtiene los últimos dos dígitos del año
+
+    return day + month + year;
   }
 }
