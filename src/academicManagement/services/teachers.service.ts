@@ -37,7 +37,7 @@ export class TeachersService {
 
   async findAll() {
     const list = await this.teacherRepository.find({
-      relations: ['role'],
+      relations: { course: true },
       where: { status: 1 },
     });
     if (!list.length) {

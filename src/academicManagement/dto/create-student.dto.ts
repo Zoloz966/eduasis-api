@@ -6,7 +6,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  NotEquals,
 } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
 import { Gender } from '../entities/students.entity';
@@ -28,18 +27,21 @@ export class CreateStudentDto {
   id: string;
 
   @IsString()
+  @IsOptional()
   password: string;
 
   @IsNumber()
   @IsNotEmpty()
-  roleIdRole: number;
+  courseIdCourse: number;
 
   @IsString()
   @IsOptional()
   token: string;
 
-  @IsEnum(Gender)
-  @NotEquals(Gender[Gender.Masculino])
+  @IsEnum(Gender, {
+    message:
+      'El género debe ser uno de los siguientes: Masculino, Femenino, Otro',
+  })
   gender: Gender;
 
   @IsString()

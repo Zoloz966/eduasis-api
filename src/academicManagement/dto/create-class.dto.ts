@@ -23,7 +23,7 @@ export class CreateClassDto {
 
   @IsNumber()
   @IsNotEmpty()
-  age: number;
+  courseIdCourse: number;
 
   @IsString()
   @IsNotEmpty()

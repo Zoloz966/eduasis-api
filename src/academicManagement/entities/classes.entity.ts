@@ -13,6 +13,7 @@ import { Subjects } from './subjects.entity';
 import { Students } from './students.entity';
 import { Grades } from './grades.entity';
 import { Tasks } from './tasks.entity';
+import { Courses } from './courses.entity';
 
 export enum Shift {
   Mañana = 'Mañana',
@@ -32,7 +33,7 @@ export class Classes {
   subjectIdSubject: number;
 
   @Column({ type: 'int', nullable: false })
-  age: number;
+  courseIdCourse: number;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   class_name: string;
@@ -63,6 +64,9 @@ export class Classes {
 
   @ManyToOne(() => Subjects, (subject) => subject.classes)
   subject: Subjects;
+
+  @ManyToOne(() => Courses, (course) => course.classes)
+  course: Courses;
 
   @OneToMany(() => Grades, (grade) => grade.class)
   grades: Grades[];

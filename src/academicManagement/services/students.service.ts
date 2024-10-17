@@ -5,8 +5,9 @@ import * as bcrypt from 'bcrypt';
 import { CreateStudentDto } from '../dto/create-student.dto';
 import { UpdateStudentDto } from '../dto/update-student.dto';
 import { Students } from '../entities/students.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { RoleService } from 'src/users/services/role.service';
+import { Courses } from '../entities/courses.entity';
 
 @Injectable()
 export class StudentsService {
@@ -14,15 +15,35 @@ export class StudentsService {
     @InjectRepository(Students)
     private studentRepository: Repository<Students>,
     private roleService: RoleService,
+
+    @InjectRepository(Courses)
+    private courseRepository: Repository<Courses>,
   ) {}
 
   async create(createStudentDto: CreateStudentDto) {
     const newStudent = this.studentRepository.create(createStudentDto);
+    const initialsLastname = newStudent.lastname.slice(0, 3).toUpperCase();
+    const birthDate = new Date(newStudent.birth_date);
+    const formattedDate = this.formatDateToString(birthDate);
+
+    newStudent.password = initialsLastname + formattedDate;
+
     const hashPassword = await bcrypt.hash(newStudent.password, 10);
     newStudent.password = hashPassword;
-    if (createStudentDto.roleIdRole) {
-      const role = await this.roleService.findOne(createStudentDto.roleIdRole);
-      newStudent.role = role;
+
+    const role = await this.roleService.findStudent();
+    newStudent.role = role;
+
+    const firstNamePart = newStudent.name.split(' ')[0].toLowerCase();
+    const lastNamePart = newStudent.lastname.split(' ')[0].toLowerCase();
+
+    newStudent.email = `${firstNamePart}.${lastNamePart}${newStudent.id}@eduasis.com`;
+
+    if (newStudent.courseIdCourse) {
+      const course = await this.courseRepository.findOne({
+        where: { id_course: newStudent.courseIdCourse },
+      });
+      newStudent.course = course;
     }
 
     const savedStudent = await this.studentRepository.save(newStudent);
@@ -32,7 +53,7 @@ export class StudentsService {
 
   async findAll() {
     const list = await this.studentRepository.find({
-      relations: ['role'],
+      relations: { role: true, course: true },
       where: { status: 1 },
     });
     if (!list.length) {
@@ -109,9 +130,11 @@ export class StudentsService {
       updateStudentDto.password = hashPassword;
     }
 
-    if (updateStudentDto.roleIdRole) {
-      const role = await this.roleService.findOne(updateStudentDto.roleIdRole);
-      item.role = role;
+    if (updateStudentDto.courseIdCourse) {
+      const course = await this.courseRepository.findOne({
+        where: { id_course: updateStudentDto.courseIdCourse },
+      });
+      item.course = course;
     }
 
     this.studentRepository.merge(item, updateStudentDto);
@@ -132,5 +155,13 @@ export class StudentsService {
     const savedStudent = await this.studentRepository.save(item);
 
     return savedStudent;
+  }
+
+  private formatDateToString(date) {
+    const day = ('0' + date.getDate()).slice(-2); // Asegura dos dígitos para el día
+    const month = ('0' + (date.getMonth() + 1)).slice(-2); // Asegura dos dígitos para el mes (getMonth() devuelve un índice de 0 a 11)
+    const year = date.getFullYear().toString().slice(-2); // Obtiene los últimos dos dígitos del año
+
+    return day + month + year;
   }
 }
