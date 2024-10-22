@@ -1,10 +1,12 @@
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
+  IsArray,
   IsDate,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
 
@@ -17,8 +19,12 @@ export class CreateTaskDto {
   task_tittle: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   description: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  classIdClass: number;
 
   @IsDate()
   @Transform(({ value }) => value && new Date(value))
@@ -31,4 +37,12 @@ export class CreateTaskDto {
   @IsNumber()
   @IsOptional()
   status: number;
+}
+
+export class CreateTaskGroupDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateTaskDto)
+  @IsNotEmpty()
+  values: CreateTaskDto[];
 }

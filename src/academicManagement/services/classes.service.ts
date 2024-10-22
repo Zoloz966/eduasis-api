@@ -23,6 +23,7 @@ export class ClassesService {
   async findAll() {
     const list = await this.classRepository.find({
       where: { status: 1 },
+      relations: { course: true, teacher: { course: true }, subject: true },
     });
     if (!list.length) {
       throw new NotFoundException({ message: 'lista vacia' });

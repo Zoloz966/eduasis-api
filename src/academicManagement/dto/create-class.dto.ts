@@ -4,7 +4,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  NotEquals,
 } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
 import { Shift } from '../entities/classes.entity';
@@ -30,7 +29,6 @@ export class CreateClassDto {
   class_name: string;
 
   @IsEnum(Shift)
-  @NotEquals(Shift[Shift.Mañana])
   shift: Shift;
 
   @IsNumber()

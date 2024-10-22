@@ -8,6 +8,7 @@ import { Students } from '../entities/students.entity';
 import { Repository } from 'typeorm';
 import { RoleService } from 'src/users/services/role.service';
 import { Courses } from '../entities/courses.entity';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class StudentsService {
@@ -45,6 +46,8 @@ export class StudentsService {
       });
       newStudent.course = course;
     }
+
+    newStudent.token = this.generateSecureToken();
 
     const savedStudent = await this.studentRepository.save(newStudent);
 
@@ -163,5 +166,9 @@ export class StudentsService {
     const year = date.getFullYear().toString().slice(-2); // Obtiene los últimos dos dígitos del año
 
     return day + month + year;
+  }
+
+  private generateSecureToken() {
+    return crypto.randomBytes(32).toString('hex');
   }
 }
