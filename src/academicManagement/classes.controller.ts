@@ -7,14 +7,12 @@ import {
   Param,
   Delete,
   UseGuards,
-  Query,
 } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { ClassesService } from './services/classes.service';
 
 @UseGuards(JwtAuthGuard)
@@ -36,6 +34,11 @@ export class ClassesController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.classesService.findOne(+id);
+  }
+
+  @Get('byCourse/:id')
+  findAllByCourse(@Param('id') id: string) {
+    return this.classesService.findByCourse(+id);
   }
 
   @Patch(':id')

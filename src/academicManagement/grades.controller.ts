@@ -36,6 +36,11 @@ export class GradesController {
     return this.gradesService.findOne(+id);
   }
 
+  @Get('byStudent/:id')
+  findAllByStudent(@Param('id') id: string) {
+    return this.gradesService.findAllByStudent(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGradeDto: UpdateGradeDto) {
     return this.gradesService.update(+id, updateGradeDto);

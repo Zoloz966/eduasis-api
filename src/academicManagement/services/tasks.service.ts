@@ -72,6 +72,18 @@ export class TasksService {
     return uniqueTasks;
   }
 
+  async findAllByStudent(idStudent: number) {
+    const list = await this.taskRepository.find({
+      where: { status: 1, studentIdStudent: idStudent },
+      order: { end_date: 'DESC' },
+      relations: { class: { subject: true, course: true, teacher: true } },
+    });
+    if (!list.length) {
+      throw new NotFoundException({ message: 'lista vacia' });
+    }
+    return list;
+  }
+
   async findOne(id: number) {
     const item = await this.taskRepository.findOne({
       where: { id_task: id, status: 1 },

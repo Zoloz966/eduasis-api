@@ -14,17 +14,16 @@ export class CreateGradeDto {
 
   @IsNumber()
   @IsNotEmpty()
-  student_id: number;
+  studentIdStudent: number;
 
   @IsNumber()
   @IsNotEmpty()
-  class_id: number;
+  classIdClass: number;
 
   @IsNumber()
   @IsOptional()
   grade: number;
 
   @IsEnum(TypeGrade)
-  @NotEquals(TypeGrade[TypeGrade.PRIMER_TRIMESTRE])
   type_grade: TypeGrade;
 }

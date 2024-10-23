@@ -4,18 +4,52 @@ import { CreateClassDto } from '../dto/create-class.dto';
 import { Classes } from '../entities/classes.entity';
 import { Repository } from 'typeorm';
 import { UpdateClassDto } from '../dto/update-class.dto';
+import { Courses } from '../entities/courses.entity';
+import { Teachers } from '../entities/teachers.entity';
+import { Subjects } from '../entities/subjects.entity';
 
 @Injectable()
 export class ClassesService {
   constructor(
     @InjectRepository(Classes)
     private classRepository: Repository<Classes>,
+
+    @InjectRepository(Courses)
+    private coursesRepository: Repository<Courses>,
+
+    @InjectRepository(Teachers)
+    private teachersRepository: Repository<Teachers>,
+
+    @InjectRepository(Subjects)
+    private subjectsRepository: Repository<Subjects>,
   ) {}
 
   async create(createClassDto: CreateClassDto) {
     const newClasse = this.classRepository.create(createClassDto);
 
     const savedClasse = await this.classRepository.save(newClasse);
+
+    if (createClassDto.courseIdCourse) {
+      const course = await this.coursesRepository.findOne({
+        where: { id_course: createClassDto.courseIdCourse },
+      });
+      newClasse.course = course;
+    }
+
+    if (createClassDto.teacherIdTeacher) {
+      const teacher = await this.teachersRepository.findOne({
+        where: { id_teacher: createClassDto.teacherIdTeacher },
+        relations: { course: true },
+      });
+      newClasse.teacher = teacher;
+    }
+
+    if (createClassDto.subjectIdSubject) {
+      const subject = await this.subjectsRepository.findOne({
+        where: { id_subject: createClassDto.subjectIdSubject },
+      });
+      newClasse.subject = subject;
+    }
 
     return savedClasse;
   }
@@ -31,17 +65,18 @@ export class ClassesService {
     return list;
   }
 
-  async findOne(id: number) {
-    const item = await this.classRepository.findOne({
-      where: { id_class: id, status: 1 },
+  async findByCourse(idCourse: number) {
+    const list = await this.classRepository.find({
+      where: { courseIdCourse: idCourse },
+      relations: { subject: true },
     });
-    if (!item) {
-      throw new NotFoundException(`This class #${id} not found`);
+    if (!list.length) {
+      throw new NotFoundException({ message: 'lista vacia' });
     }
-    return item;
+    return list;
   }
 
-  async findOneClasse(id: number) {
+  async findOne(id: number) {
     const item = await this.classRepository.findOne({
       where: { id_class: id, status: 1 },
     });

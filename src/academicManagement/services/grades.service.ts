@@ -15,6 +15,18 @@ export class GradesService {
   async create(createGradeDto: CreateGradeDto) {
     const newGrade = this.gradeRepository.create(createGradeDto);
 
+    const isGrade = await this.gradeRepository.findOne({
+      where: {
+        studentIdStudent: createGradeDto.studentIdStudent,
+        type_grade: createGradeDto.type_grade,
+        classIdClass: createGradeDto.classIdClass,
+      },
+    });
+
+    if (isGrade) {
+      throw new NotFoundException(`Esta nota para la materia ya existe`);
+    }
+
     const savedGrade = await this.gradeRepository.save(newGrade);
 
     return savedGrade;
@@ -22,6 +34,17 @@ export class GradesService {
 
   async findAll() {
     const list = await this.gradeRepository.find();
+    if (!list.length) {
+      throw new NotFoundException({ message: 'lista vacia' });
+    }
+    return list;
+  }
+
+  async findAllByStudent(idStudent: number) {
+    const list = await this.gradeRepository.find({
+      where: { studentIdStudent: idStudent },
+    });
+
     if (!list.length) {
       throw new NotFoundException({ message: 'lista vacia' });
     }

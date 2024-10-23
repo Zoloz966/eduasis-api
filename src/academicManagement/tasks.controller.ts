@@ -37,6 +37,11 @@ export class TasksController {
     return this.tasksService.findOne(+id);
   }
 
+  @Get('byStudent/:id')
+  findByStudent(@Param('id') id: string) {
+    return this.tasksService.findAllByStudent(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksService.update(+id, updateTaskDto);
