@@ -91,6 +91,28 @@ export class ClassesService {
       where: { id_class: id, status: 1 },
     });
 
+    if (updateClasseDto.courseIdCourse) {
+      const course = await this.coursesRepository.findOne({
+        where: { id_course: updateClasseDto.courseIdCourse },
+      });
+      item.course = course;
+    }
+
+    if (updateClasseDto.teacherIdTeacher) {
+      const teacher = await this.teachersRepository.findOne({
+        where: { id_teacher: updateClasseDto.teacherIdTeacher },
+        relations: { course: true },
+      });
+      item.teacher = teacher;
+    }
+
+    if (updateClasseDto.subjectIdSubject) {
+      const subject = await this.subjectsRepository.findOne({
+        where: { id_subject: updateClasseDto.subjectIdSubject },
+      });
+      item.subject = subject;
+    }
+
     this.classRepository.merge(item, updateClasseDto);
 
     const savedClasse = await this.classRepository.save(item);

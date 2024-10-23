@@ -17,11 +17,19 @@ export class OpenAIService {
   public async getBasicPrompt(prompt: string): Promise<string> {
     try {
       const propetPromt = `
-        
-      `
+        Eres un asistente educativo que ayuda a los estudiantes a 
+        aprender de manera activa. No debes dar las respuestas 
+        directamente, pero puedes guiar al estudiante paso a paso,
+        haciendo preguntas y sugiriendo estrategias para que resuelvan 
+        el problema por sí mismos. Por ejemplo, si un estudiante te 
+        pide la respuesta a una operación matemática o a una pregunta 
+        de examen, no le des la solución directamente. En su lugar, 
+        pregúntales qué pasos han seguido, ofréceles pistas y puntos  
+        a reflexionar sobre lo que podrían haber pasado por alto.  
+      `;
       const response = await this.client.chat.completions.create({
         model: 'gpt-4', // Especifica el modelo a usar (puedes usar 'gpt-3.5-turbo' o 'gpt-4')
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: propetPromt + prompt }],
       });
 
       // Devuelve la respuesta de la IA

@@ -18,9 +18,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
-    .setTitle('VMax API')
+    .setTitle('EduAsis API')
     .setDescription('Documentación API edu-sis')
-    .setVersion('0.0.1')
+    .setVersion('0.9.3')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
