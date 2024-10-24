@@ -34,11 +34,6 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('/logs')
-  findAllLogs(@Query() params: FilterUsersLogDto) {
-    return this.usersService.findAllLogs(params);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(+id);

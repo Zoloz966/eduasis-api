@@ -14,7 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { OpenAIService } from './services/openAi.service';
 
-// @UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiTags('openAi')
 @Controller('openAi')
 export class OpenAiController {

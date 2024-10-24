@@ -9,6 +9,8 @@ import { Repository } from 'typeorm';
 import { RoleService } from 'src/users/services/role.service';
 import { Courses } from '../entities/courses.entity';
 import * as crypto from 'crypto';
+import { access } from 'fs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class StudentsService {
@@ -73,6 +75,7 @@ export class StudentsService {
     if (!item) {
       throw new NotFoundException(`This student #${id} not found`);
     }
+
     return item;
   }
 

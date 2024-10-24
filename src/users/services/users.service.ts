@@ -16,10 +16,7 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
-    @InjectRepository(UserLogs)
-    private userLogsRepository: Repository<UserLogs>,
     private roleService: RoleService,
-    private readonly userContextAuth: UserContextService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -34,18 +31,6 @@ export class UsersService {
 
     const savedUser = await this.userRepository.save(newUser);
 
-    if (userCount > 0) {
-      const userId = this.userContextAuth.getUser().id_user;
-      const logDto: CreateUserLogsDto = {
-        id_user_logs: 0,
-        title: 'Creación de usuario',
-        detail: `Usuario ${createUserDto.name} (ID: ${savedUser.id_user}) creado`,
-        userIdUser: userId,
-        icon: 'user-plus',
-        color: '#37D52F',
-      };
-      this.createLogUser(logDto);
-    }
     return savedUser;
   }
 
@@ -102,7 +87,7 @@ export class UsersService {
 
   async findbyemail(email: string) {
     const item = await this.userRepository.findOne({
-      relations: ['role' ],
+      relations: ['role'],
       where: { email: email, status: 1 },
     });
 
@@ -118,10 +103,9 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const userId = this.userContextAuth.getUser().id_user;
     const item = await this.userRepository.findOne({
       where: { id_user: id, status: 1 },
-      relations: ['role' ],
+      relations: ['role'],
     });
 
     if (updateUserDto.password) {
@@ -138,21 +122,10 @@ export class UsersService {
 
     const savedUser = await this.userRepository.save(item);
 
-    const logDto: CreateUserLogsDto = {
-      id_user_logs: 0,
-      title: 'Edición de usuario',
-      detail: `Usuario ${updateUserDto.name} (ID: ${savedUser.id_user}) actualizado`,
-      userIdUser: userId,
-      icon: 'pencil',
-      color: '#2F7FD5',
-    };
-    this.createLogUser(logDto);
-
     return savedUser;
   }
 
   async remove(id: number) {
-    const userId = this.userContextAuth.getUser().id_user;
     const item = await this.userRepository.findOneBy({ id_user: id });
     const deleteUser: UpdateUserDto = {
       status: 0,
@@ -162,36 +135,6 @@ export class UsersService {
 
     const savedUser = await this.userRepository.save(item);
 
-    const logDto: CreateUserLogsDto = {
-      id_user_logs: 0,
-      title: 'Eliminación de usuario',
-      detail: `Usuario ${item.name} (ID: ${savedUser.id_user}) eliminado`,
-      userIdUser: userId,
-      icon: 'times',
-      color: '#D53C2F',
-    };
-    this.createLogUser(logDto);
-
     return savedUser;
-  }
-
-  async findAllLogs(params?: FilterUsersLogDto) {
-    if (params) {
-      const { limit, offset, id_user } = params;
-      return this.userLogsRepository.find({
-        where: { userIdUser: id_user },
-        take: limit,
-        skip: offset,
-        order: {
-          id_user_logs: 'DESC',
-        },
-      });
-    }
-    return this.userLogsRepository.find();
-  }
-
-  createLogUser(createUserLogsDto: CreateUserLogsDto) {
-    const newObj = this.userLogsRepository.create(createUserLogsDto);
-    return this.userLogsRepository.save(newObj);
   }
 }

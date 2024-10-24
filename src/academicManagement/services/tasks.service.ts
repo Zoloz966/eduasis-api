@@ -94,38 +94,63 @@ export class TasksService {
     return item;
   }
 
-  async findOneTask(id: number) {
-    const item = await this.taskRepository.findOne({
-      where: { id_task: id, status: 1 },
-    });
-    if (!item) {
-      throw new NotFoundException(`This task #${id} not found`);
-    }
-    return item;
-  }
-
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     const item = await this.taskRepository.findOne({
       where: { id_task: id, status: 1 },
     });
 
-    this.taskRepository.merge(item, updateTaskDto);
+    if (!item) {
+      throw new NotFoundException('Task not found');
+    }
+    if (updateTaskDto.classIdClass) {
+      const classe = await this.classesRespository.findOne({
+        where: { id_class: updateTaskDto.classIdClass },
+        relations: { teacher: true, subject: true, course: true },
+      });
+      updateTaskDto.class = classe;
+    }
 
-    const savedTask = await this.taskRepository.save(item);
+    const tasksToUpdate = await this.taskRepository.find({
+      where: { task_tittle: item.task_tittle },
+    });
 
-    return savedTask;
+    if (!tasksToUpdate || tasksToUpdate.length === 0) {
+      throw new NotFoundException('Tasks not found');
+    }
+
+    const taskPromises = tasksToUpdate.map(async (task) => {
+      this.taskRepository.merge(task, updateTaskDto);
+      return await this.taskRepository.save(task); // Corregido: guarda el task, no el item
+    });
+
+    const savedTasksArray = await Promise.all(taskPromises);
+
+    return savedTasksArray[0];
   }
 
   async remove(id: number) {
     const item = await this.taskRepository.findOneBy({ id_task: id });
-    const deleteTask: UpdateTaskDto = {
-      status: 0,
-    };
 
-    this.taskRepository.merge(item, deleteTask);
+    if (!item) {
+      throw new NotFoundException('Task not found');
+    }
 
-    const savedTask = await this.taskRepository.save(item);
+    const deleteTask = { status: 0 };
 
-    return savedTask;
+    const tasksToDelete = await this.taskRepository.find({
+      where: { task_tittle: item.task_tittle },
+    });
+
+    if (!tasksToDelete || tasksToDelete.length === 0) {
+      throw new NotFoundException('Tasks not found');
+    }
+
+    const taskPromises = tasksToDelete.map(async (task) => {
+      this.taskRepository.merge(task, deleteTask);
+      return await this.taskRepository.save(task); // Corregido: guarda el task
+    });
+    const savedTasksArray = await Promise.all(taskPromises);
+
+    return savedTasksArray[0];
   }
 }

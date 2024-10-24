@@ -22,12 +22,9 @@ import { RoleService } from 'src/users/services/role.service';
 import { Role } from 'src/users/entities/role.entity';
 import { Users } from 'src/users/entities/user.entity';
 import { Access } from 'src/users/entities/access.entity';
-import { UserLogs } from 'src/users/entities/userLog.entity';
-import { UserContextModule } from 'src/userContext/userContext.module';
 import { Courses } from './entities/courses.entity';
 import { CoursesController } from './courses.controller';
 import { CoursesService } from './services/courses.service';
-
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -40,10 +37,8 @@ import { CoursesService } from './services/courses.service';
       Grades,
       Role,
       Access,
-      UserLogs,
       Courses,
     ]),
-    UserContextModule,
   ],
   controllers: [
     StudentsController,

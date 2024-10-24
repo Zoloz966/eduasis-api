@@ -15,7 +15,6 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Public } from 'src/auth/decorators/public.decorator';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('academicManagement')
@@ -32,6 +31,7 @@ export class StudentsController {
   findAll() {
     return this.studentsService.findAll();
   }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

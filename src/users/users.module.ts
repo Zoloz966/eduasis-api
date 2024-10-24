@@ -17,8 +17,7 @@ import { UserContextModule } from 'src/userContext/userContext.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Users, UserLogs, Role, Access]),
-    UserContextModule,
+    TypeOrmModule.forFeature([Users, Role, Access]),
   ],
   controllers: [UsersController, RoleController, AccessController],
   providers: [UsersService, RoleService, AccessService],

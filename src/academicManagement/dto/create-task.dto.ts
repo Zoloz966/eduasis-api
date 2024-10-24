@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
+import { Classes } from '../entities/classes.entity';
 
 export class CreateTaskDto {
   @PrimaryGeneratedColumn()
@@ -37,6 +38,9 @@ export class CreateTaskDto {
   @IsNumber()
   @IsOptional()
   status: number;
+
+  @IsOptional()
+  class?: Classes
 }
 
 export class CreateTaskGroupDto {

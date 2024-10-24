@@ -12,13 +12,19 @@ import config from './../config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { UserContextModule } from 'src/userContext/userContext.module';
+import { AcademicManagementModule } from 'src/academicManagement/academicManagement.module';
+import { Teachers } from 'src/academicManagement/entities/teachers.entity';
+import { Students } from 'src/academicManagement/entities/students.entity';
+import { StudentStrategy } from './strategies/student.strategy';
+import { TeacherStrategy } from './strategies/teacher.strategy';
+import { StudentTokenStrategy } from './strategies/studentToken.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Teachers, Students]),
     UsersModule,
-    PassportModule,
     UserContextModule,
+    PassportModule,
     ConfigModule.forRoot(),
     JwtModule.registerAsync({
       inject: [config.KEY],
@@ -32,7 +38,14 @@ import { UserContextModule } from 'src/userContext/userContext.module';
       },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    StudentTokenStrategy,
+    StudentStrategy,
+    TeacherStrategy,
+  ],
   controllers: [AuthController],
   exports: [AuthService],
 })

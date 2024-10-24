@@ -7,9 +7,6 @@ import { UpdateRoleDto } from '../dto/update-role.dto';
 import { Access } from '../entities/access.entity';
 
 import { Role } from '../entities/role.entity';
-import { UserContextService } from 'src/userContext/service/userContext.service';
-import { CreateUserLogsDto } from '../dto/create-userLog.dto';
-import { UserLogs } from '../entities/userLog.entity';
 
 @Injectable()
 export class RoleService {
@@ -18,14 +15,9 @@ export class RoleService {
     public roleRepository: Repository<Role>,
     @InjectRepository(Access)
     public accessRepository: Repository<Access>,
-    @InjectRepository(UserLogs)
-    public userLogsRepository: Repository<UserLogs>,
-
-    private userContextService: UserContextService,
   ) {}
 
   async create(data: CreateRoleDto) {
-    const userId = this.userContextService.getUser().id_user;
     const newObj = this.roleRepository.create(data);
 
     if (data.id_access) {
@@ -36,16 +28,6 @@ export class RoleService {
     }
 
     const savedRole = await this.roleRepository.save(newObj);
-
-    const logDto: CreateUserLogsDto = {
-      id_user_logs: 0,
-      title: 'Creación de rol',
-      detail: `Rol ${data.name} (ID: ${savedRole.id_role}) creado`,
-      userIdUser: userId,
-      icon: 'plus',
-      color: '#37D52F',
-    };
-    this.createLogUser(logDto);
 
     return savedRole;
   }
@@ -105,7 +87,6 @@ export class RoleService {
   }
 
   async update(id: number, changes: UpdateRoleDto) {
-    const userId = this.userContextService.getUser().id_user;
     const item = await this.roleRepository.findOneBy({
       id_role: id,
       status: 1,
@@ -120,21 +101,10 @@ export class RoleService {
     }
     const savedRole = await this.roleRepository.save(item);
 
-    const logDto: CreateUserLogsDto = {
-      id_user_logs: 0,
-      title: 'Edición de rol',
-      detail: `Rol ${item.name} (ID: ${savedRole.id_role}) actualizado`,
-      userIdUser: userId,
-      icon: 'pencil',
-      color: '#2F7FD5',
-    };
-    this.createLogUser(logDto);
-
     return savedRole;
   }
 
   async remove(id: number) {
-    const userId = this.userContextService.getUser().id_user;
     const item = await this.roleRepository.findOneBy({ id_role: id });
     const deleteRole: UpdateRoleDto = {
       status: 0,
@@ -144,21 +114,7 @@ export class RoleService {
 
     const savedRole = await this.roleRepository.save(item);
 
-    const logDto: CreateUserLogsDto = {
-      id_user_logs: 0,
-      title: 'Eliminación de rol',
-      detail: `Rol ${item.name} (ID: ${savedRole.id_role}) eliminado`,
-      userIdUser: userId,
-      icon: 'times',
-      color: '#D53C2F',
-    };
-    this.createLogUser(logDto);
-
     return savedRole;
   }
 
-  createLogUser(createUserLogsDto: CreateUserLogsDto) {
-    const newObj = this.userLogsRepository.create(createUserLogsDto);
-    return this.userLogsRepository.save(newObj);
-  }
 }

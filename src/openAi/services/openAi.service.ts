@@ -6,7 +6,7 @@ import OpenAI from 'openai'; // Asegúrate de tener la librería instalada
 export class OpenAIService {
   private client: OpenAI;
 
-  constructor(private readonly userContextAuth: UserContextService) {
+  constructor() {
     // Inicializa el cliente con la API Key obtenida de las variables de entorno
     this.client = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY, // Aquí accedes a la variable de entorno
