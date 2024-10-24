@@ -60,6 +60,10 @@ export class CreateStudentDto {
   @IsOptional()
   photo: string;
 
+  @IsString()
+  @IsOptional()
+  qr_image: string;
+
   @IsNumber()
   @IsOptional()
   isEnabled: number;
